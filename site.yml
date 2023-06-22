@@ -1,0 +1,7 @@
+#ansible-playbook -i inventory.ini site.yml -u root
+---
+  - hosts: "*"
+    become: true
+    roles:
+      - role: IBP-Monitoring
+        version_branch: 0.1.0

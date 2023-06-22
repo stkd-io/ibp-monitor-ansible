@@ -1,0 +1,5 @@
+---
+# defaults file for IBP-Monitoring
+P2P_PUBLIC_PORT: 30000
+HTTP_PORT: 30001
+API_PORT: 30002

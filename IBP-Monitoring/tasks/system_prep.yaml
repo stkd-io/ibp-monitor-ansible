@@ -1,0 +1,39 @@
+---
+- name: Ensure group "docker" exists
+  ansible.builtin.group:
+    name: docker
+    state: present
+
+- name: add IBP service account
+  ansible.builtin.user:
+    name: IBP
+    shell: /bin/bash
+    groups: docker
+    append: yes
+
+- name: Allow all access to OpenSSH
+  ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Allow all access to tcp port {{ P2P_PUBLIC_PORT }}
+  ufw:
+    rule: allow
+    port: "{{ P2P_PUBLIC_PORT }}"
+    proto: tcp
+
+- name: Allow all access to tcp port {{ HTTP_PORT }}
+  ufw:
+    rule: allow
+    port: "{{ HTTP_PORT }}"
+    proto: tcp
+
+- name: Allow all access to tcp port {{ API_PORT }}
+  ufw:
+    rule: allow
+    port: "{{ API_PORT }}"
+    proto: tcp
+
+- name: Enable UFW
+  ufw:
+    state: enabled

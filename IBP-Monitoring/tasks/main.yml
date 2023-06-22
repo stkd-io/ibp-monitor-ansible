@@ -1,0 +1,60 @@
+---
+# tasks file for IBP-Monitoring
+
+
+- import_tasks: system_prep.yaml
+
+- import_tasks: packages_prep.yaml
+
+
+- name: Create folder and set ownership, group and permissions
+  ansible.builtin.file:
+    path: /home/IBP/ibp-monitor
+    owner: IBP
+    group: IBP
+    state: directory
+    mode: '0770'
+
+- git_config:
+    name: safe.directory 
+    value: "/home/IBP/ibp-monitor"
+    scope: global
+  become_user: IBP
+
+- name: Git checkout
+  ansible.builtin.git:
+    repo: 'https://github.com/ibp-network/ibp-monitor.git'
+    dest: /home/IBP/ibp-monitor
+    clone: yes
+    force: true
+  become_user: IBP
+
+- name: Template a env file to /home/IBP/ibp-monitor/docker/.env
+  ansible.builtin.template:
+    src: env.j2
+    dest: /home/IBP/ibp-monitor/docker/.env
+    mode: '0770'
+
+- name: Create folder and set ownership, group and permissions
+  ansible.builtin.file:
+    path: /home/IBP/ibp-monitor
+    owner: IBP
+    group: IBP
+    recurse: true 
+    mode: '0770'
+  become: true
+
+- name: git checkout
+  become_user: IBP
+  shell:
+    cmd: "git checkout {{ version_branch }}"
+    chdir: /home/IBP/ibp-monitor/
+
+- name: docker-compose up
+  become_user: IBP
+  shell:
+    cmd: "docker compose up -d"
+    chdir: /home/IBP/ibp-monitor/docker/
+
+
+
