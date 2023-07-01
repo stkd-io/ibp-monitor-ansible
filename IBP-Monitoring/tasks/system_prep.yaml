@@ -22,17 +22,15 @@
     port: "{{ P2P_PUBLIC_PORT }}"
     proto: tcp
 
-- name: Allow all access to tcp port {{ HTTP_PORT }}
+- name: Allow access to Nginx HTTP
   ufw:
     rule: allow
-    port: "{{ HTTP_PORT }}"
-    proto: tcp
+    port: 80
 
-- name: Allow all access to tcp port {{ API_PORT }}
+- name: Allow access to Nginx HTTPS
   ufw:
     rule: allow
-    port: "{{ API_PORT }}"
-    proto: tcp
+    port: 443
 
 - name: Enable UFW
   ufw:

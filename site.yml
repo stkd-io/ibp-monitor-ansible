@@ -5,3 +5,4 @@
     roles:
       - role: IBP-Monitoring
         version_branch: 0.1.0
+        P2P_PUBLIC_HOST: "ibp-testing.stkd.io"

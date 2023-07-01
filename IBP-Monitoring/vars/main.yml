@@ -5,3 +5,5 @@ P2P_PUBLIC_HOST:
 P2P_PUBLIC_IP:
 
 version_branch: 0.1.0
+
+acme_email: ""

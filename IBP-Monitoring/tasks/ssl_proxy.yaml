@@ -1,0 +1,38 @@
+- name: Install "docker" packages
+  ansible.builtin.apt:
+    name:
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+    state: latest
+    update_cache: yes
+
+- name: Allow Nginx HTTP
+  ufw:
+    rule: allow
+    name: Nginx HTTP
+
+- name: Allow Nginx HTTPS
+  ufw:
+    rule: allow
+    name: Nginx HTTPS
+
+- name: Setup nginx.conf file
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+    mode: '0770'
+  notify: restart nginx
+
+- name: Check if certificate already exists.
+  stat:
+    path: /etc/letsencrypt/live/{{ P2P_PUBLIC_HOST }}/cert.pem
+  register: letsencrypt_cert
+
+- name: Setting up certbot
+  command: "certbot certonly --standalone -d {{ P2P_PUBLIC_HOST }} --agree-tos --noninteractive --register-unsafely-without-email"
+  when: not letsencrypt_cert.stat.exists and acme_email|length == 0
+
+- name: Setting up certbot with email
+  command: "certbot certonly --standalone -d {{ P2P_PUBLIC_HOST }} --agree-tos --noninteractive -m {{ acme_email }}"
+  when: not letsencrypt_cert.stat.exists and acme_email|length > 0

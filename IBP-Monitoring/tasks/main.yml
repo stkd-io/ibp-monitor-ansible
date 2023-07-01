@@ -6,6 +6,8 @@
 
 - import_tasks: packages_prep.yaml
 
+- import_tasks: ssl_proxy.yaml
+
 
 - name: Create folder and set ownership, group and permissions
   ansible.builtin.file:
@@ -49,6 +51,12 @@
   shell:
     cmd: "git checkout {{ version_branch }}"
     chdir: /home/IBP/ibp-monitor/
+
+- name: docker-compose up
+  become_user: IBP
+  shell:
+    cmd: "docker build"
+    chdir: /home/IBP/ibp-monitor/docker/
 
 - name: docker-compose up
   become_user: IBP

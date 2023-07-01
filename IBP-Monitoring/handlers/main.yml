@@ -1,2 +1,4 @@
 ---
 # handlers file for IBP-Monitoring
+- name: restart nginx
+  service: name=nginx state=restarted
