@@ -11,7 +11,7 @@ docker_path=$git_path'/docker/docker-compose.yml'
 
 docker compose -f $docker_path down
 
-docker system prune -a
+#docker system prune -a
 
 git -C $git_path pull 
 git -C $git_path checkout $git_branch
