@@ -11,7 +11,7 @@ docker_path=$git_path'/docker/docker-compose.yml'
 
 docker compose -f $docker_path down
 
-#docker system prune -a
+docker system prune -a
 
 git -C $git_path pull 
 git -C $git_path checkout $git_branch
@@ -22,8 +22,8 @@ sed -i "s/'3306:3306'/'127.0.0.1:3306:3306'/g" $docker_path
 sed -i "s/'3000:3000'/'127.0.0.1:3000:3000'/g" $docker_path
 
 #Sed commands to update the docker compose to expose with nginix and SSL
-sed -i "s/- '30002:30002'/- '127.0.0.1:30002:30002'/g" $docker_path
-sed -i "s/- '30001:80'/- '127.0.0.1:30001:80'/g" $docker_path
+sed -i "s/'30002:30002'/'127.0.0.1:30002:30002'/g" $docker_path
+sed -i "s/'30001:80'/'127.0.0.1:30001:80'/g" $docker_path
 
 docker compose -f $docker_path build
 docker compose -f $docker_path up -d
